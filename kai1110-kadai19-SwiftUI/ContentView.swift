@@ -1,21 +1,43 @@
-//
-//  ContentView.swift
-//  kai1110-kadai19-SwiftUI
-//
-//  Created by 渡邊魁優 on 2023/02/10.
-//
 
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var fruitsList = FruitDate()
+    @State private var isAddView = false
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                ForEach(fruitsList.fruits) { item in
+                    ListItemView(fruit: item)
+                }
+                .onDelete(perform: fruitsList.delete)
+            }
+            .listStyle(InsetListStyle())
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isAddView = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isAddView) {
+                FruitAddView(
+                    cancel: {
+                        isAddView = false
+                    },
+                    save: { text in
+                        fruitsList.addFruit(text: text)
+                        isAddView = false
+                    }
+                )
+            }
+            .onAppear() {
+                let savedFruits = fruitsList.getDefaults()
+                fruitsList.fruits = fruitsList.decodeFruit(json: savedFruits)
+            }
         }
-        .padding()
     }
 }
 
