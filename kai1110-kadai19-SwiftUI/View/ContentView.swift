@@ -10,9 +10,8 @@ struct ContentView: View {
                 ForEach(fruitViewModel.fruits) { item in
                     ListItemView(
                         fruit: item,
-                        update: {
-                            print("クロージャ内 : \(item)")
-                            fruitViewModel.updateDefaults()
+                        update: { newFruit in
+                            fruitViewModel.updateDefaults(newFruit: newFruit)
                         }
                     )
                 }
@@ -40,7 +39,7 @@ struct ContentView: View {
                 )
             }
             .onAppear() {
-                fruitViewModel.fruits = fruitViewModel.firstGet()
+                fruitViewModel.firstGet()
             }
         }
     }

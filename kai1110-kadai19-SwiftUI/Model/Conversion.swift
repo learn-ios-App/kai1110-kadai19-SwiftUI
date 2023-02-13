@@ -1,6 +1,7 @@
 
 import Foundation
 
+//UserDefaultsで扱うための処理のモデル
 class ConversionModel {
     func encode(fruits: [Fruit]) -> String {
         do {
@@ -11,7 +12,6 @@ class ConversionModel {
             return ""
         }
     }
-    
     func decode(json: String) -> [Fruit] {
         do {
             let data = json.data(using: .utf8)!
