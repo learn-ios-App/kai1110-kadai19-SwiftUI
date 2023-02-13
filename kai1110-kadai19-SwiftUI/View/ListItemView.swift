@@ -4,11 +4,14 @@ import SwiftUI
 struct ListItemView: View {
     @State var fruit: Fruit
     @State var isEditView = false
+    let update: () -> Void
     var body: some View {
         HStack {
             HStack {
                 Button(action: {
+                    print("ボタンが押された時 : \(fruit.check)")
                     fruit.check.toggle()
+                    update()
                 }) {
                     Image(
                         systemName: fruit.check
@@ -34,6 +37,7 @@ struct ListItemView: View {
                 },
                 edit: { text in
                     fruit.name = text
+                    update()
                     isEditView = false
                 }
             )
@@ -43,6 +47,6 @@ struct ListItemView: View {
 
 struct ListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        ListItemView(fruit: Fruit(name: "りんご", check: false))
+        ListItemView(fruit: Fruit(name: "りんご", check: false), update: {})
     }
 }

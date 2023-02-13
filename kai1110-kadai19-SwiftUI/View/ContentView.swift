@@ -2,15 +2,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var fruitsList = FruitDate()
+    @StateObject var fruitViewModel = FruitViewModel()
     @State private var isAddView = false
     var body: some View {
         NavigationStack {
             List {
-                ForEach(fruitsList.fruits) { item in
-                    ListItemView(fruit: item)
+                ForEach(fruitViewModel.fruits) { item in
+                    ListItemView(
+                        fruit: item,
+                        update: {
+                            print("クロージャ内 : \(item)")
+                            fruitViewModel.updateDefaults()
+                        }
+                    )
                 }
-                .onDelete(perform: fruitsList.delete)
+                .onDelete(perform: fruitViewModel.delete)
             }
             .listStyle(InsetListStyle())
             .toolbar {
@@ -28,14 +34,13 @@ struct ContentView: View {
                         isAddView = false
                     },
                     save: { text in
-                        fruitsList.addFruit(text: text)
+                        fruitViewModel.addFruit(text: text)
                         isAddView = false
                     }
                 )
             }
             .onAppear() {
-                let savedFruits = fruitsList.getDefaults()
-                fruitsList.fruits = fruitsList.decodeFruit(json: savedFruits)
+                fruitViewModel.fruits = fruitViewModel.firstGet()
             }
         }
     }
