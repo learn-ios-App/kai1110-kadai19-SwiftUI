@@ -104,8 +104,8 @@
 		8BBDE74E2999F60000C923CE /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8B86DEFE29964EF000B557AA /* FruitAddView.swift */,
 				8B86DEF029964BD400B557AA /* ContentView.swift */,
+				8B86DEFE29964EF000B557AA /* FruitAddView.swift */,
 				8B86DF00299651BC00B557AA /* ListItemView.swift */,
 				8B86DF02299653FF00B557AA /* EditView.swift */,
 			);
