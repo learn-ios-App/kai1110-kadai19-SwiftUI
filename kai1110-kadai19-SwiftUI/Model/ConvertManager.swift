@@ -2,7 +2,7 @@
 import Foundation
 
 //UserDefaultsで扱うための処理のモデル
-class ConversionModel {
+class ConvertManager {
     func encode(fruits: [Fruit]) -> String {
         do {
             let data = try JSONEncoder().encode(fruits)

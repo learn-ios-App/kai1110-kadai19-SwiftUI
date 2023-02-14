@@ -1,7 +1,7 @@
 
 import Foundation
 
-class UserDefaultsModel {
+class UserDefaultsManager {
     let userDefaults = UserDefaults.standard
     //UserDefaultsに保存
     func setDefaults(json: String) -> Void {

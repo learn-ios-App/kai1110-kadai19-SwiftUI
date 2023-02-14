@@ -9,9 +9,9 @@ class FruitViewModel: ObservableObject {
         Fruit(name: "パイナップル", check: false)
     ]
     //エンコード・デコードするためのインスタンス
-    private let conversion = ConversionModel()
+    private let conversion = ConvertManager()
     //UserDefaultsへの処理を行う為のインスタンス
-    private let userDefaults = UserDefaultsModel()
+    private let userDefaults = UserDefaultsManager()
 
     func delete(offset: IndexSet) {
         self.fruits.remove(atOffsets: offset)
