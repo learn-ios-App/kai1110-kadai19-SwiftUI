@@ -3,16 +3,14 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var fruitViewModel = FruitViewModel()
-    @State private var isAddView = false
+
     var body: some View {
         NavigationStack {
             List {
                 ForEach(fruitViewModel.fruits) { item in
                     ListItemView(
                         fruit: item,
-                        update: { newFruit in
-                            fruitViewModel.updateDefaults(newFruit: newFruit)
-                        }
+                        update: fruitViewModel.didTapListItemUpdateButton(newFruit:)
                     )
                 }
                 .onDelete(perform: fruitViewModel.delete)
@@ -20,27 +18,18 @@ struct ContentView: View {
             .listStyle(InsetListStyle())
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        isAddView = true
-                    }) {
+                    Button(action: fruitViewModel.didTapPlusButton) {
                         Image(systemName: "plus")
                     }
                 }
             }
-            .sheet(isPresented: $isAddView) {
+            .sheet(isPresented: $fruitViewModel.isAddView) {
                 FruitAddView(
-                    cancel: {
-                        isAddView = false
-                    },
-                    save: { text in
-                        fruitViewModel.addFruit(text: text)
-                        isAddView = false
-                    }
+                    cancel: fruitViewModel.didTapAddViewCancelButton,
+                    save: fruitViewModel.didTapAddViewSaveButton(text:)
                 )
             }
-            .onAppear() {
-                fruitViewModel.firstGet()
-            }
+            .onAppear(perform: fruitViewModel.onAppear)
         }
     }
 }
