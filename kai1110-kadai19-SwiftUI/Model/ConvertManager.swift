@@ -3,22 +3,26 @@ import Foundation
 
 //UserDefaultsで扱うための処理のモデル
 class ConvertManager {
-    func encode(fruits: [Fruit]) -> String {
+    func encode(fruits: [Fruit]) -> String? {
         do {
             let data = try JSONEncoder().encode(fruits)
-            let json = String(data: data, encoding: .utf8)!
+            guard let json = String(data: data, encoding: .utf8) else {
+                return nil
+            }
             return json
         } catch {
-            return ""
+            return nil
         }
     }
-    func decode(json: String) -> [Fruit] {
+    func decode(json: String) -> [Fruit]? {
         do {
-            let data = json.data(using: .utf8)!
+            guard let data = json.data(using: .utf8) else {
+                return nil
+            }
             let fruits = try JSONDecoder().decode([Fruit].self, from: data)
             return fruits
         } catch {
-            return []
+            return nil
         }
     }
 }

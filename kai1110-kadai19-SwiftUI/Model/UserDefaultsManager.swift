@@ -2,16 +2,15 @@
 import Foundation
 
 class UserDefaultsManager {
-    let userDefaults = UserDefaults.standard
+    private let userDefaults = UserDefaults.standard
+    private var key = "Fruits_Key"
     //UserDefaultsに保存
     func setDefaults(json: String) -> Void {
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(json, forKey: "Fruits_Key")
+        userDefaults.set(json, forKey: key)
     }
     //UserDefaultsから取得
-    func getDefaults() -> String {
-        let userDefaults = UserDefaults.standard
-        let fruits = userDefaults.string(forKey: "Fruits_Key") ?? ""
+    func loadJSON() -> String? {
+        let fruits = userDefaults.string(forKey: key)
         return fruits
     }
 }

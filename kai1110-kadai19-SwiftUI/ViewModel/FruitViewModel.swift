@@ -9,19 +9,25 @@ class FruitViewModel: ObservableObject {
         Fruit(name: "パイナップル", check: false)
     ]
     //エンコード・デコードするためのインスタンス
-    private let conversion = ConvertManager()
+    private let convert = ConvertManager()
     //UserDefaultsへの処理を行う為のインスタンス
     private let userDefaults = UserDefaultsManager()
+    
+    @Published var isAddView = false
 
     func delete(offset: IndexSet) {
         self.fruits.remove(atOffsets: offset)
-        let fruitsJson = conversion.encode(fruits: fruits)
+        guard let fruitsJson = convert.encode(fruits: fruits) else {
+            return
+        }
             userDefaults.setDefaults(json: fruitsJson)
     }
     
     func addFruit(text: String) {
         self.fruits.append(Fruit(name: text, check: false))
-        let fruitsJson = conversion.encode(fruits: fruits)
+        guard let fruitsJson = convert.encode(fruits: fruits) else {
+            return
+        }
             userDefaults.setDefaults(json: fruitsJson)
     }
     
@@ -31,14 +37,37 @@ class FruitViewModel: ObservableObject {
             return
         }
         fruits[index] = newFruit
-        let result = conversion.encode(fruits: self.fruits)
+        guard let result = convert.encode(fruits: self.fruits) else {
+            return
+        }
         userDefaults.setDefaults(json: result)
     }
     
     //アプリ起動時に呼ばれるメソッド
-    func firstGet() {
-        let savedJson = userDefaults.getDefaults()
-        let fruitList = conversion.decode(json: savedJson)
-        self.fruits = fruitList
+    func onAppear() {
+        guard let savedJson = userDefaults.loadJSON() else {
+            return
+        }
+        guard let savedFruits = convert.decode(json: savedJson) else {
+            return
+        }
+        fruits = savedFruits
+    }
+    
+    func didTapListItemUpdateButton(newFruit: Fruit) {
+        updateDefaults(newFruit: newFruit)
+    }
+    
+    func didTapPlusButton() {
+        isAddView = true
+    }
+    
+    func didTapAddViewCancelButton() {
+        isAddView = false
+    }
+    
+    func didTapAddViewSaveButton(text: String) {
+        addFruit(text: text)
+        isAddView = false
     }
 }
