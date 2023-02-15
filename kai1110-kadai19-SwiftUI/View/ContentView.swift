@@ -21,7 +21,7 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        isAddView = true
+                        fruitViewModel.didTapPlusButton()
                     }) {
                         Image(systemName: "plus")
                     }
@@ -30,17 +30,14 @@ struct ContentView: View {
             .sheet(isPresented: $isAddView) {
                 FruitAddView(
                     cancel: {
-                        isAddView = false
+                        fruitViewModel.didTapAddViewCancelButton()
                     },
                     save: { text in
-                        fruitViewModel.addFruit(text: text)
-                        isAddView = false
+                        fruitViewModel.didTapAddViewSaveButton(text: text)
                     }
                 )
             }
-            .onAppear() {
-                fruitViewModel.firstGet()
-            }
+            .onAppear(perform: fruitViewModel.onAppear)
         }
     }
 }
