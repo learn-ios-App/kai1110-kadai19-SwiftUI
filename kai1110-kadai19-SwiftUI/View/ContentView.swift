@@ -3,7 +3,6 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var fruitViewModel = FruitViewModel()
-    @State private var isAddView = false
     var body: some View {
         NavigationStack {
             List {
@@ -11,7 +10,7 @@ struct ContentView: View {
                     ListItemView(
                         fruit: item,
                         update: { newFruit in
-                            fruitViewModel.updateDefaults(newFruit: newFruit)
+                            fruitViewModel.update(newFruit: newFruit)
                         }
                     )
                 }
@@ -27,7 +26,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .sheet(isPresented: $isAddView) {
+            .sheet(isPresented: $fruitViewModel.isAddView) {
                 FruitAddView(
                     cancel: {
                         fruitViewModel.didTapAddViewCancelButton()
